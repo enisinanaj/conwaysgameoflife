@@ -21,19 +21,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Conway's Game of Life" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cGG-PT-hs1">
-                                <rect key="frame" x="0.0" y="214" width="375" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Conway's Game of Life" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cGG-PT-hs1">
+                                <rect key="frame" x="0.0" y="50" width="375" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="conwaysicon" translatesAutoresizingMaskIntoConstraints="NO" id="fZ1-ip-yeU">
-                                <rect key="frame" x="75.5" y="257" width="224" height="152"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallconway" translatesAutoresizingMaskIntoConstraints="NO" id="fZ1-ip-yeU">
+                                <rect key="frame" x="130" y="101" width="115" height="120"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.18377590673575128" green="0.18377590673575128" blue="0.18377590673575128" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cGG-PT-hs1" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="8oG-BI-9nB"/>
+                            <constraint firstItem="cGG-PT-hs1" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="30" id="Zt0-R5-UVg"/>
+                            <constraint firstItem="fZ1-ip-yeU" firstAttribute="top" secondItem="cGG-PT-hs1" secondAttribute="bottom" constant="22" id="gKb-rg-67c"/>
                             <constraint firstItem="cGG-PT-hs1" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" id="qgR-td-zQQ"/>
                             <constraint firstItem="fZ1-ip-yeU" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="zt2-Zb-3yv"/>
                         </constraints>
@@ -41,10 +43,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52" y="374.66266866566718"/>
+            <point key="canvasLocation" x="51.25" y="373.125"/>
         </scene>
     </scenes>
     <resources>
-        <image name="conwaysicon" width="224" height="224"/>
+        <image name="smallconway" width="115" height="120"/>
     </resources>
 </document>

@@ -13,6 +13,7 @@ class Grid: SKSpriteNode {
     var game: Engine!
     var blockSize:CGFloat!
     var spinnyNode: SKShapeNode?
+    var currentSpinnyNode: SKShapeNode?
     
     convenience init?(blockSize:CGFloat, game: Engine) {
         guard let texture = Grid.gridTexture(blockSize: blockSize,
@@ -83,9 +84,10 @@ class Grid: SKSpriteNode {
             else {
                 let x = size.width / 2 + position.x
                 let y = size.height / 2 - position.y
-                let row = Int(floor(x / blockSize))
-                let col = Int(floor(y / blockSize))
+                let col = Int(floor(x / blockSize))
+                let row = Int(floor(y / blockSize))
                 addLifeForms(atRow: row, atColumn: col)
+                game.switchOnAt(row, col)
                 print("\(row) \(col)")
             }
             
@@ -103,14 +105,14 @@ class Grid: SKSpriteNode {
             
             spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
             spinnyNode.position = (self.gridPosition(row: 0, col: 0))
+            spinnyNode.strokeColor = generateRandomColor()
         }
     }
     
     func addLifeForms(atRow: Int, atColumn: Int) {
-        let spinnyNode: SKNode = self.spinnyNode?.copy() as! SKNode
-        spinnyNode.position = (self.gridPosition(row: atColumn, col: atRow))
-        self.addChild(spinnyNode)
-        game.switchOnAt(atColumn, atRow)
+        currentSpinnyNode = self.spinnyNode?.copy() as? SKShapeNode
+        currentSpinnyNode?.position = (self.gridPosition(row: atRow, col: atColumn))
+        self.addChild((currentSpinnyNode)!)
     }
     
     func designBoard(board: Array<Array<Bool>>) {
@@ -128,5 +130,37 @@ class Grid: SKSpriteNode {
     
     func clearChildren() {
         self.removeAllChildren()
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+    }
+    
+    func touchDown(atPoint pos : CGPoint) {
+        //currentSpinnyNode?.strokeColor = SKColor.green
+    }
+    
+    func touchMoved(toPoint pos : CGPoint) {
+        //currentSpinnyNode?.strokeColor = SKColor.blue
+    }
+    
+    func touchUp(atPoint pos : CGPoint) {
+        //currentSpinnyNode?.strokeColor = SKColor.red
+    }
+    
+    func generateRandomColor() -> UIColor {
+        let hue : CGFloat = CGFloat(arc4random() % 256) / 256 // use 256 to get full range from 0.0 to 1.0
+        let saturation : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from white
+        let brightness : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from black
+        
+        return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
     }
 }

@@ -29,39 +29,13 @@ class Engine {
     }
     
     func switchOnAt(_ x: Int, _ y: Int) {
-        board.removeAll()
-        
-        for rowIndex in 0...gameSettings.rows {
-            var rowValues = Array<Bool>()
-            for colIndex in 0...gameSettings.cols {
-                var value: Bool = false
-                if (rowIndex == y && colIndex == x) {
-                    value = true
-                }
-                
-                rowValues.append(value)
-            }
-            
-            board.append(rowValues)
-        }
+        board[x][y] = true
+        //print(toString(board))
     }
     
     func switchOffAt(_ x: Int, _ y: Int) {
-        board.removeAll()
-        
-        for rowIndex in 0...gameSettings.rows {
-            var rowValues = Array<Bool>()
-            for colIndex in 0...gameSettings.cols {
-                var value: Bool = false
-                if (rowIndex == y && colIndex == x) {
-                    value = false
-                }
-                
-                rowValues.append(value)
-            }
-            
-            board.append(rowValues)
-        }
+        board[x][y] = false
+        //print(toString(board))
     }
     
     func passGeneration() {
@@ -78,5 +52,20 @@ class Engine {
         
         board.removeAll()
         board.append(contentsOf: newGeneration)
+        
+        //print(toString(board))
+    }
+    
+    func toString(_ board: Array<Array<Bool>>) -> String {
+        var string: String = "_____________________________________\n"
+        for rowIndex in 0...gameSettings.rows {
+            string = string + "| "
+            for colIndex in 0...gameSettings.cols {
+                string = string + (board[rowIndex][colIndex] ? "true" : "false") + " |"
+            }
+            string = string + "\n"
+        }
+        
+        return string
     }
 }
