@@ -16,9 +16,9 @@ class Engine {
     init(_ cols: Int,_ rows: Int) {
         board = Array<Any>() as! Array<Array<Bool>>
         
-        for _ in 0...rows {
+        for _ in 0...rows-1 {
             var rowValues = Array<Bool>()
-            for _ in 0...cols {
+            for _ in 0...cols-1 {
                 rowValues.append(false)
             }
             
@@ -40,9 +40,9 @@ class Engine {
     
     func passGeneration() {
         var newGeneration = Array<Array<Bool>>()
-        for rowIndex in 0...gameSettings.rows {
+        for rowIndex in 0...gameSettings.rows-1 {
             var rowValues = Array<Bool>()
-            for colIndex in 0...gameSettings.cols {
+            for colIndex in 0...gameSettings.cols-1 {
                 let value = CellProcessor(board: board, settings: gameSettings).processCellAt(row: rowIndex, col: colIndex)
                 rowValues.append(value)
             }

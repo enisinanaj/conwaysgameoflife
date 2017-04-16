@@ -18,6 +18,8 @@ class Playground: SKScene {
     private var game: Engine?
     private var grid: Grid?
     private var lastUpdateTime: TimeInterval = 0
+    private var isPlaying:Bool = false
+    private var timer: Timer?
     
     override func sceneDidLoad() {
         self.name = "Playground"
@@ -58,9 +60,12 @@ class Playground: SKScene {
             if node.name == "speedReduxGameNode" {
                 self.decrementGameSpeed()
             }
-            
+            if node.name == "pauseGameNode" {
+                pauseGame()
+            }
             if node.name == "playGameNode" {
-                self.updateGrid()
+                if !isPlaying { timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(Playground.updateGrid), userInfo: nil, repeats: true)}
+                //self.updateGrid()
             }
             
             print("touched node in playground: " + (node.name)!)
@@ -106,7 +111,13 @@ class Playground: SKScene {
     }
     
     func updateGrid() {
+        isPlaying = true
         grid?.designBoard(board: (game?.board)!)
+    }
+    
+    func pauseGame() {
+        isPlaying = false
+        timer?.invalidate()
     }
     
     override func update(_ currentTime: TimeInterval) {

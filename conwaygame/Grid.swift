@@ -119,8 +119,8 @@ class Grid: SKSpriteNode {
         clearChildren()
         game.passGeneration()
         
-        for rowIndex in 0...game.gameSettings.rows {
-            for colIndex in 0...game.gameSettings.cols {
+        for rowIndex in 0...game.gameSettings.rows-1 {
+            for colIndex in 0...game.gameSettings.cols-1 {
                 if (game.board[rowIndex][colIndex]) {
                     addLifeForms(atRow: rowIndex, atColumn: colIndex)
                 }
