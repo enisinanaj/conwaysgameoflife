@@ -90,6 +90,12 @@ class Playground: SKScene {
     }
     
     func startLife() {
+        let playLabel = self.childNode(withName: "//playGameNode") as? SKLabelNode
+        playLabel?.fontColor = UIColor(colorLiteralRed: 0.8, green: 0.8, blue: 0.8, alpha: 0.8)
+        
+        let pauseLabel = self.childNode(withName: "//pauseGameNode") as? SKLabelNode
+        pauseLabel?.fontColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 1)
+        
         if !isPlaying { timer = Timer.scheduledTimer(timeInterval: 1 / Double((game?.gameSettings.iterationSpeed)!), target: self, selector: #selector(Playground.updateGrid), userInfo: nil, repeats: true)}
     }
     
@@ -114,8 +120,14 @@ class Playground: SKScene {
     
     func pauseGame() {
         isPlaying = false
+        let pauseLabel = self.childNode(withName: "//pauseGameNode") as? SKLabelNode
+        pauseLabel?.fontColor = UIColor(colorLiteralRed: 0.8, green: 0.8, blue: 0.8, alpha: 0.8)
+        
+        let playLabel = self.childNode(withName: "//playGameNode") as? SKLabelNode
+        playLabel?.fontColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 1)
         timer?.invalidate()
     }
+    
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
