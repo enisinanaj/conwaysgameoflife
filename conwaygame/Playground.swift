@@ -96,8 +96,11 @@ class Playground: SKScene {
     func incrementGameSpeed() {
         game?.gameSettings.incrementIterationSpeed()
         updateSpeedLabel()
-        pauseGame()
-        startLife()
+        
+        if isPlaying {
+            pauseGame()
+            startLife()
+        }
     }
     
     func updateSpeedLabel() {
