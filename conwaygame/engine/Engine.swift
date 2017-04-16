@@ -43,7 +43,7 @@ class Engine {
         for rowIndex in 0...gameSettings.rows-1 {
             var rowValues = Array<Bool>()
             for colIndex in 0...gameSettings.cols-1 {
-                let value = CellProcessor(board: board, settings: gameSettings).processCellAt(row: rowIndex, col: colIndex)
+                let value = CellProcessor(board: board, settings: gameSettings).processCellAt(row: rowIndex, col: colIndex, value: board[rowIndex][colIndex])
                 rowValues.append(value)
             }
             

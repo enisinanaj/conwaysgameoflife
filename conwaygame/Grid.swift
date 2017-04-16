@@ -11,7 +11,6 @@ import GameplayKit
 
 class Grid: SKSpriteNode {
     var game: Engine!
-    var blockSize:CGFloat!
     var spinnyNode: SKShapeNode?
     var currentSpinnyNode: SKShapeNode?
     
@@ -24,7 +23,6 @@ class Grid: SKSpriteNode {
         
         self.init(texture: texture, color:SKColor.clear, size: texture.size())
         
-        self.blockSize = blockSize
         self.game = game
         initLifeForm()
     }
@@ -37,24 +35,29 @@ class Grid: SKSpriteNode {
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
+        
         let bezierPath = UIBezierPath()
         let offset:CGFloat = 0.5
+        
         // Draw vertical lines
         for i in 0...cols {
             let x = CGFloat(i)*blockSize + offset
             bezierPath.move(to: CGPoint(x: x, y: 0))
             bezierPath.addLine(to: CGPoint(x: x, y: size.height))
         }
+        
         // Draw horizontal lines
         for i in 0...rows {
             let y = CGFloat(i)*blockSize + offset
             bezierPath.move(to: CGPoint(x: 0, y: y))
             bezierPath.addLine(to: CGPoint(x: size.width, y: y))
         }
+        
         SKColor.white.setStroke()
         bezierPath.lineWidth = 1.0
         bezierPath.stroke()
         context.addPath(bezierPath.cgPath)
+        context.setStrokeColor(UIColor(colorLiteralRed: 0.6, green: 0.6, blue: 0.6, alpha: 1).cgColor)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -62,13 +65,13 @@ class Grid: SKSpriteNode {
     }
     
     func gridPosition(row:Int, col:Int) -> CGPoint {
-        let offset = blockSize / 2.0 + 0.5
+        let offset = Double(GameSettings.blockSize) / 2.0 + 0.5
         
         let cols = game.gameSettings.cols
-        let x = CGFloat(col) * blockSize - (blockSize * CGFloat(cols)) / 2.0 + offset
+        let x = CGFloat(col) * CGFloat(GameSettings.blockSize) - (CGFloat(GameSettings.blockSize) * CGFloat(cols)) / CGFloat(2.0) + CGFloat(offset)
         
         let rows = game.gameSettings.rows
-        let y = CGFloat(rows - row - 1) * blockSize - (blockSize * CGFloat(rows)) / 2.0 + offset
+        let y = CGFloat(rows - row - 1) * CGFloat(GameSettings.blockSize) - (CGFloat(GameSettings.blockSize) * CGFloat(rows)) / CGFloat(2.0) + CGFloat(offset)
         
         return CGPoint(x:x, y:y)
     }
@@ -84,8 +87,8 @@ class Grid: SKSpriteNode {
             else {
                 let x = size.width / 2 + position.x
                 let y = size.height / 2 - position.y
-                let col = Int(floor(x / blockSize))
-                let row = Int(floor(y / blockSize))
+                let col = Int(floor(x / CGFloat(GameSettings.blockSize)))
+                let row = Int(floor(y / CGFloat(GameSettings.blockSize)))
                 addLifeForms(atRow: row, atColumn: col)
                 game.switchOnAt(row, col)
                 print("\(row) \(col)")
@@ -112,6 +115,8 @@ class Grid: SKSpriteNode {
     func addLifeForms(atRow: Int, atColumn: Int) {
         currentSpinnyNode = self.spinnyNode?.copy() as? SKShapeNode
         currentSpinnyNode?.position = (self.gridPosition(row: atRow, col: atColumn))
+        currentSpinnyNode?.strokeColor = generateRandomColor()
+        currentSpinnyNode?.fillColor = (currentSpinnyNode?.strokeColor)!
         self.addChild((currentSpinnyNode)!)
     }
     

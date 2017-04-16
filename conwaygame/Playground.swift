@@ -26,25 +26,25 @@ class Playground: SKScene {
         
         calculateGridParams()
         game = Engine(columnsInGrid, rowsInGrid)
-        grid = Grid(blockSize: 40.0, game: game!)
+        grid = Grid(blockSize: CGFloat((GameSettings.blockSize)), game: game!)
         grid?.name = "GameGrid"
         
-        grid?.position = CGPoint (x:frame.midX + 30, y:frame.midY)
+        grid?.position = CGPoint (x:frame.width/18 , y:frame.midY)
         grid?.isUserInteractionEnabled = true
         addChild(grid!)
     }
     
     func calculateGridParams() {
-        let width = UIScreen.main.bounds.width
-        let height = UIScreen.main.bounds.height
+        let width = self.frame.width / 1.2 //UIScreen.main.fixedCoordinateSpace.bounds.width * 1.9
+        let height = self.frame.height //UIScreen.main.fixedCoordinateSpace.bounds.height / 1.5
         
-        columnsInGrid = Int(width / 40) - 2
-        rowsInGrid = Int(height / 40) - 1
+        columnsInGrid = Int(width / CGFloat((GameSettings.blockSize)))
+        rowsInGrid = Int(height / CGFloat((GameSettings.blockSize)))
         
         print("rowsInGrid: " + String(rowsInGrid))
         print("columnsInGrid: " + String(columnsInGrid))
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             let position = t.location(in:self)
@@ -53,19 +53,15 @@ class Playground: SKScene {
                 self.presentMainMenu()
             }
             
-            if node.name == "speedIncrementGameNode" {
+            if node.name == "speedGameNode" {
                 self.incrementGameSpeed()
             }
             
-            if node.name == "speedReduxGameNode" {
-                self.decrementGameSpeed()
-            }
             if node.name == "pauseGameNode" {
                 pauseGame()
             }
             if node.name == "playGameNode" {
-                if !isPlaying { timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(Playground.updateGrid), userInfo: nil, repeats: true)}
-                //self.updateGrid()
+                startLife()
             }
             
             print("touched node in playground: " + (node.name)!)
@@ -93,14 +89,15 @@ class Playground: SKScene {
         }
     }
     
+    func startLife() {
+        if !isPlaying { timer = Timer.scheduledTimer(timeInterval: 1 / Double((game?.gameSettings.iterationSpeed)!), target: self, selector: #selector(Playground.updateGrid), userInfo: nil, repeats: true)}
+    }
+    
     func incrementGameSpeed() {
         game?.gameSettings.incrementIterationSpeed()
         updateSpeedLabel()
-    }
-    
-    func decrementGameSpeed() {
-        game?.gameSettings.decrementIterationSpeed()
-        updateSpeedLabel()
+        pauseGame()
+        startLife()
     }
     
     func updateSpeedLabel() {

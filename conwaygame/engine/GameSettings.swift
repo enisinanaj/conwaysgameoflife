@@ -12,8 +12,10 @@ class GameSettings {
     
     var iteration: Int
     var iterationSpeed: Int
-    var cols: Int
-    var rows: Int
+    let cols: Int
+    let rows: Int
+    static let blockSize: Int = 35
+    static let MAX_SPEED = 6
     
     init(_ iterationSpeed: Int, cols: Int, rows: Int) {
         self.iteration = 0
@@ -27,10 +29,10 @@ class GameSettings {
     }
     
     func incrementIterationSpeed() {
-        self.iterationSpeed = self.iterationSpeed + 1
-    }
-    
-    func decrementIterationSpeed() {
-        self.iterationSpeed = self.iterationSpeed - 1
+        if (self.iterationSpeed == GameSettings.MAX_SPEED) {
+            self.iterationSpeed = 1
+        } else {
+            self.iterationSpeed = self.iterationSpeed + 1
+        }
     }
 }

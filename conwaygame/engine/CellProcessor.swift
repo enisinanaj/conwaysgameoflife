@@ -13,6 +13,7 @@ class CellProcessor {
     var gameSettings: GameSettings
     var board = Array<Array<Bool>>()
     var borderingCells = Array<Bool>()
+    var originalValue: Bool = false
     
     init(board: Array<Array<Bool>>, settings: GameSettings) {
         self.board = board
@@ -20,7 +21,9 @@ class CellProcessor {
         self.gameSettings = settings
     }
     
-    func processCellAt(row: Int, col: Int) -> Bool {
+    func processCellAt(row: Int, col: Int, value: Bool) -> Bool {
+        originalValue = value
+        
         let negativeRowIndex = row-1 < 0 ? 0 : row - 1
         let negativeColIndex = col-1 < 0 ? 0 : col - 1
         let positiveRowIndex = row+1 > gameSettings.rows-1 ? gameSettings.rows-1 : row + 1
@@ -35,7 +38,7 @@ class CellProcessor {
         borderingCells.append(board[row][positiveColIndex])
         borderingCells.append(board[negativeRowIndex][positiveColIndex])
         
-        return countLivingNeighbors() == 2
+        return getStatus(countLivingNeighbors())
     }
     
     func countLivingNeighbors() -> Int {
@@ -47,5 +50,15 @@ class CellProcessor {
         }
         
         return result
+    }
+    
+    func getStatus(_ neighbors: Int) -> Bool {
+        if originalValue {
+            return neighbors == 2 || neighbors == 3
+        } else if !originalValue {
+            return neighbors == 3
+        }
+        
+        return false
     }
 }
