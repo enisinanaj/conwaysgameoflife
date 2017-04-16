@@ -91,7 +91,6 @@ class Grid: SKSpriteNode {
                 let row = Int(floor(y / CGFloat(GameSettings.blockSize)))
                 addLifeForms(atRow: row, atColumn: col)
                 game.switchOnAt(row, col)
-                print("\(row) \(col)")
             }
             
             print("touch listened in grid")

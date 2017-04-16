@@ -28,6 +28,10 @@ class Engine {
         gameSettings = GameSettings(2, cols: cols, rows: rows)
     }
     
+    func statusAt(_ x: Int, _ y: Int) -> Bool {
+        return board[x][y]
+    }
+    
     func switchOnAt(_ x: Int, _ y: Int) {
         board[x][y] = true
         //print(toString(board))
