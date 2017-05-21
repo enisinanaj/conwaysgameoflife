@@ -29,6 +29,9 @@ class GameScene: SKScene {
             if node.name == "startGameNode" {
                 print("starting game...")
                 openPlayground()
+            } else if node.name == "gameInfoNode" {
+                let url = NSURL(string: "https://en.wikipedia.org/wiki/Conway's_Game_of_Life")!
+                UIApplication.shared.open(url as URL)
             }
             
             print("touched node is: " + (node.name)!)
@@ -48,7 +51,7 @@ class GameScene: SKScene {
                 sceneNode.graphs = scene.graphs
                 
                 // Set the scale mode to scale to fit the window
-                sceneNode.scaleMode = .aspectFill
+                sceneNode.scaleMode = .aspectFit
                 
                 // Present the scene
                 let reveal = SKTransition.push(with: .left, duration: 0.8) //flipHorizontal(withDuration: 0.5)

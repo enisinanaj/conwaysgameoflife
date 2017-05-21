@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+import UIKit
 
 class Grid: SKSpriteNode {
     var game: Engine!
@@ -37,7 +38,7 @@ class Grid: SKSpriteNode {
         }
         
         let bezierPath = UIBezierPath()
-        let offset:CGFloat = 0.5
+        let offset:CGFloat = 0.2
         
         // Draw vertical lines
         for i in 0...cols {
@@ -53,11 +54,11 @@ class Grid: SKSpriteNode {
             bezierPath.addLine(to: CGPoint(x: size.width, y: y))
         }
         
-        SKColor.white.setStroke()
-        bezierPath.lineWidth = 1.0
+        SKColor(cgColor: UIColor(colorLiteralRed: 0.4, green: 0.4, blue: 0.4, alpha: 0.2).cgColor).setStroke()
+        bezierPath.lineWidth = 0.6
         bezierPath.stroke()
         context.addPath(bezierPath.cgPath)
-        context.setStrokeColor(UIColor(colorLiteralRed: 0.6, green: 0.6, blue: 0.6, alpha: 1).cgColor)
+        //context.setStrokeColor(UIColor(colorLiteralRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.2).cgColor)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -65,7 +66,7 @@ class Grid: SKSpriteNode {
     }
     
     func gridPosition(row:Int, col:Int) -> CGPoint {
-        let offset = Double(GameSettings.blockSize) / 2.0 + 0.5
+        let offset = Double(GameSettings.blockSize) / 2.0 + 1.0
         
         let cols = game.gameSettings.cols
         let x = CGFloat(col) * CGFloat(GameSettings.blockSize) - (CGFloat(GameSettings.blockSize) * CGFloat(cols)) / CGFloat(2.0) + CGFloat(offset)
@@ -83,8 +84,7 @@ class Grid: SKSpriteNode {
             if node != self {
 //                let action = SKAction.rotate(by:CGFloat.pi*2, duration: 1)
 //                node.run(action)
-            }
-            else {
+            } else {
                 let x = size.width / 2 + position.x
                 let y = size.height / 2 - position.y
                 let col = Int(floor(x / CGFloat(GameSettings.blockSize)))
@@ -99,7 +99,7 @@ class Grid: SKSpriteNode {
     
     func initLifeForm() {
         //Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.015
+        let w = (self.size.width + self.size.height) * 0.020
         self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
         
         if let spinnyNode = self.spinnyNode {
