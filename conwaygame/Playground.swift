@@ -15,6 +15,8 @@ class Playground: SKScene {
     var graphs = [String: GKGraph]()
     private var columnsInGrid: Int = 40
     private var rowsInGrid: Int = 20
+    private var menuHeight: Int = 50
+    private var offset: CGFloat?
     private var game: Engine?
     private var grid: Grid?
     private var lastUpdateTime: TimeInterval = 0
@@ -31,7 +33,7 @@ class Playground: SKScene {
         game = Engine(columnsInGrid, rowsInGrid)
         grid = Grid(blockSize: CGFloat((GameSettings.blockSize)), game: game!)
         grid?.name = "GameGrid"
-        grid?.position = CGPoint (x:frame.midX , y:frame.midY)
+        grid?.position = CGPoint (x:frame.midX, y: CGFloat(offset!))
         grid?.isUserInteractionEnabled = true
         
         addMenu()
@@ -41,7 +43,7 @@ class Playground: SKScene {
     func addMenu() {
         let menu = SKSpriteNode()
         menu.color = UIColor(colorLiteralRed: 0.8, green: 0.8, blue: 0.8, alpha: 0.3)
-        menu.size = CGSize(width: self.frame.width, height: 50)
+        menu.size = CGSize(width: self.frame.width, height: CGFloat(menuHeight))
         menu.anchorPoint = CGPoint(x: 0.0, y: 0.0)
         menu.name = "menuContainer"
         menu.position.x = 0
@@ -51,30 +53,29 @@ class Playground: SKScene {
         let playButton = SKSpriteNode(imageNamed: "Play")
         playButton.name = "playGameNode"
         playButton.size = CGSize(width: 30.0, height: 30.0)
-        playButton.position.x = 25
+        playButton.position.x = self.frame.size.width - 100
         playButton.position.y = 25
         playButton.zPosition = 101
         
-        let stopButton = SKSpriteNode(imageNamed: "StopDisabled")
+        let stopButton = SKSpriteNode(imageNamed: "Stop")//"StopDisabled")
         stopButton.name = "stopGameNode"
         stopButton.size = CGSize(width: 30.0, height: 30.0)
-        stopButton.position.x = 60
+        stopButton.position.x = self.frame.size.width - 65
         stopButton.position.y = 25
         stopButton.zPosition = 101
         
         let speedUpButton = SKSpriteNode(imageNamed: "SpeedUp")
         speedUpButton.name = "speedGameNode"
         speedUpButton.size = CGSize(width: 30.0, height: 30.0)
-        speedUpButton.position.x = 95
+        speedUpButton.position.x = self.frame.size.width - 30
         speedUpButton.position.y = 25
         speedUpButton.zPosition = 101
         
         let menuButton = SKSpriteNode(imageNamed: "Menu")
         menuButton.name = "backToMenuGameNode"
         menuButton.size = CGSize(width: 60.0, height: 30.0)
-        menuButton.position.x = 40
-        //menuButton.position.y = UIScreen.main.bounds.height - 23
-        menuButton.position.y = self.frame.size.height - 23
+        menuButton.position.x = 50
+        menuButton.position.y = 25
         menuButton.zPosition = 101
         
         let generationLabel = SKLabelNode()
@@ -109,13 +110,18 @@ class Playground: SKScene {
         rectSize = CGSize(width: width, height: height)
         
         columnsInGrid = Int(width / CGFloat((GameSettings.blockSize)))
-        rowsInGrid = Int(height / CGFloat((GameSettings.blockSize)))
+        rowsInGrid = Int((height - CGFloat(menuHeight)) / CGFloat(GameSettings.blockSize))
+        
+        let gridSize = (CGFloat(rowsInGrid)*CGFloat(GameSettings.blockSize))
+        offset = (height - CGFloat(menuHeight)) - gridSize
+        offset = (offset! / CGFloat(2)) + CGFloat(menuHeight) + (gridSize / CGFloat(2))
         
         print("frame width: " + String(describing: self.frame.size.width))
         print("frame height: " + String(describing: self.frame.size.height))
         print("uiscreen width: " + String(describing: UIScreen.main.bounds.width))
         print("uiscreen height: " + String(describing: UIScreen.main.bounds.height))
         print("rowsInGrid: " + String(rowsInGrid))
+        print("offset height: " + String(describing: offset!))
         print("columnsInGrid: " + String(columnsInGrid))
     }
 
@@ -165,17 +171,24 @@ class Playground: SKScene {
     }
     
     func startLife(firstGenerationStart: Bool) {
-        if firstGenerationStart {
+        if (firstGenerationStart) {
             let playNode = self.childNode(withName: "//playGameNode") as? SKSpriteNode
             playNode?.texture = SKTexture(imageNamed: "PlayDisabled")
         
             let pauseNode = self.childNode(withName: "//stopGameNode") as? SKSpriteNode
-            pauseNode?.texture = SKTexture(imageNamed: "Stop")
+            pauseNode?.texture = SKTexture(image: UIImage(named: "Stop")!)
             
             updateSpeedLabel()
         }
         
-        if !isPlaying { timer = Timer.scheduledTimer(timeInterval: 1 / Double((game?.gameSettings.iterationSpeed)!), target: self, selector: #selector(Playground.updateGrid), userInfo: nil, repeats: true)}
+        if !isPlaying {
+            timer = Timer.scheduledTimer(
+                timeInterval: 1 / Double((game?.gameSettings.iterationSpeed)!),
+                target: self, selector: #selector(Playground.updateGrid),
+                userInfo: nil,
+                repeats: true
+            )
+        }
     }
     
     func incrementGameSpeed() {
@@ -206,10 +219,10 @@ class Playground: SKScene {
         timer?.invalidate()
         
         if stopGenerationCount {
-            let pauseNode = self.childNode(withName: "//stopGameNode") as? SKSpriteNode
+            let pauseNode = self.childNode(withName: "stopGameNode") as? SKSpriteNode
             pauseNode?.texture = SKTexture(imageNamed: "StopDisabled")
         
-            let playNode = self.childNode(withName: "//playGameNode") as? SKSpriteNode
+            let playNode = self.childNode(withName: "playGameNode") as? SKSpriteNode
             playNode?.texture = SKTexture(imageNamed: "Play")
         
             game?.gameSettings.iteration = 0

@@ -15,7 +15,7 @@ class GameSettings {
     var iterationSpeed: Int = 0
     let cols: Int
     let rows: Int
-    static let blockSize: Int = 30
+    static let blockSize: Int = 37
     static let MAX_SPEED = 6
     
     init(_ iterationSpeed: Int, cols: Int, rows: Int) {
