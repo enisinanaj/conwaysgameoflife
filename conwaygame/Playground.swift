@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+import GoogleMobileAds
 
 class Playground: SKScene {
     
@@ -22,6 +23,9 @@ class Playground: SKScene {
     private var lastUpdateTime: TimeInterval = 0
     private var isPlaying:Bool = false
     private var timer: Timer?
+    
+    var rootViewController: GameViewController?
+    var interstitial: GADInterstitial!
     
     private var rectSize: CGSize?
     
@@ -38,11 +42,14 @@ class Playground: SKScene {
         
         addMenu()
         addChild(grid!)
+        
+        interstitial = GADInterstitial(adUnitID: "ca-app-pub-6514681921761516/3323322983")
+        interstitial.load(GADRequest())
     }
     
     func addMenu() {
         let menu = SKSpriteNode()
-        menu.color = UIColor(colorLiteralRed: 0.8, green: 0.8, blue: 0.8, alpha: 0.3)
+        menu.color = UIColor(displayP3Red: 0.8, green: 0.8, blue: 0.8, alpha: 0.3)
         menu.size = CGSize(width: self.frame.width, height: CGFloat(menuHeight))
         menu.anchorPoint = CGPoint(x: 0.0, y: 0.0)
         menu.name = "menuContainer"
@@ -130,6 +137,8 @@ class Playground: SKScene {
             let position = t.location(in:self)
             let node = atPoint(position)
             if node.name == "backToMenuGameNode" {
+                rootViewController!.reloadBanner()
+                presentInterstitial()
                 self.presentMainMenu()
             }
             
@@ -146,6 +155,12 @@ class Playground: SKScene {
             }
             
             print("touched node in playground: " + (node.name)!)
+        }
+    }
+    
+    func presentInterstitial() {
+        if interstitial.isReady {
+            interstitial.present(fromRootViewController: self.rootViewController!)
         }
     }
     
@@ -208,7 +223,7 @@ class Playground: SKScene {
         }
     }
     
-    func updateGrid() {
+    @objc func updateGrid() {
         isPlaying = true
         game?.gameSettings.iterate(label: self.childNode(withName: "//generationLabel") as! SKLabelNode)
         grid?.designBoard(board: (game?.board)!)

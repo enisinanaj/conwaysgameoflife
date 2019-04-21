@@ -13,6 +13,7 @@ class GameScene: SKScene {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
+    var rootViewController: GameViewController?
     
     private var lastUpdateTime : TimeInterval = 0
     private var spinnyNode : SKShapeNode?
@@ -28,6 +29,7 @@ class GameScene: SKScene {
             let node = atPoint(position)
             if node.name == "startGameNode" {
                 print("starting game...")
+                rootViewController!.hideBannerView()
                 openPlayground()
             } else if node.name == "gameInfoNode" {
                 let url = NSURL(string: "https://en.wikipedia.org/wiki/Conway's_Game_of_Life")!
@@ -49,6 +51,7 @@ class GameScene: SKScene {
                 // Copy gameplay related content over to the scene
                 sceneNode.entities = scene.entities
                 sceneNode.graphs = scene.graphs
+                sceneNode.rootViewController = self.rootViewController
                 
                 // Set the scale mode to scale to fit the window
                 sceneNode.scaleMode = .aspectFit
